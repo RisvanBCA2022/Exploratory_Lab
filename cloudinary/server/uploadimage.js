@@ -1,4 +1,5 @@
 var cloudinary = require("cloudinary").v2;
+require('dotenv').config()
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -24,3 +25,12 @@ module.exports = (image)=>{ //image => base64
         })
     })
 }
+
+module.exports.uploadMultipleImages = (images) => {
+    return new Promise((resolve, reject) => {
+      const uploads = images.map((base) => uploadImage(base));
+      Promise.all(uploads)
+        .then((values) => resolve(values))
+        .catch((err) => reject(err));
+    });
+  };
